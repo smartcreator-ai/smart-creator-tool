@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>AI Voice Generator - Smart Creator</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+
+<div class="dashboard">
+
+
+<aside class="sidebar">
+
+<div class="logo">
+<span>✦</span> Smart Creator
+</div>
+
+
+<div class="sidebar-menu">
+
+
+<p class="menu-title">
+WORKSPACE
+</p>
+
+
+<a href="dashboard.html" class="menu-item">
+🏠 Dashboard
+</a>
+
+
+<a href="script-writer.html" class="menu-item">
+✍️ AI Script Writer
+</a>
+
+
+<a href="voice-generator.html" class="menu-item active">
+🎙️ AI Voice
+</a>
+
+
+<a href="#" class="menu-item">
+💬 Subtitle
+</a>
+
+
+</div>
+
+</aside>
+
+
+
+
+<main class="dashboard-main">
+
+
+<header class="dashboard-header">
+
+<div>
+
+<h1>
+AI Voice Generator 🎙️
+</h1>
+
+<p>
+Convert your script into natural AI voice.
+</p>
+
+</div>
+
+
+<div class="credit-box">
+
+<span>
+⚡
+</span>
+
+<div>
+
+<small>
+Credits
+</small>
+
+<strong>
+100
+</strong>
+
+</div>
+
+</div>
+
+
+</header>
+
+
+
+
+
+<section class="script-workspace">
+
+
+<div class="script-settings">
+
+
+<div class="panel-title">
+
+<h2>
+Voice Settings
+</h2>
+
+<p>
+Choose voice style and generate audio.
+</p>
+
+</div>
+
+
+
+<label>
+Language
+</label>
+
+
+<select id="voiceLanguage">
+
+<option>
+Burmese
+</option>
+
+<option>
+English
+</option>
+
+</select>
+
+
+
+<label>
+Voice Type
+</label>
+
+
+<select id="voiceType">
+
+<option>
+Male Narrator
+</option>
+
+<option>
+Female Narrator
+</option>
+
+</select>
+
+
+
+
+<label>
+Script
+</label>
+
+
+<textarea
+id="voiceText"
+placeholder="Paste your script here..."
+></textarea>
+
+
+
+<button
+class="generate-script"
+id="generateVoice"
+>
+
+🎙️ Generate Voice
+
+</button>
+
+
+</div>
+
+
+
+
+
+
+<div class="script-output">
+
+
+<div class="output-header">
+
+<h2>
+Generated Voice
+</h2>
+
+
+</div>
+
+
+
+<div
+class="script-result"
+id="voiceResult"
+>
+
+
+<div class="result-empty">
+
+<div>
+🎙️
+</div>
+
+
+<h3>
+No Voice Generated
+</h3>
+
+
+<p>
+Enter script and click generate.
+</p>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+</section>
+
+
+</main>
+
+
+</div>
+
+
+
+<script src="voice-generator.js"></script>
+
+
+</body>
+
+</html>
