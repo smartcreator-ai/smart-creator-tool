@@ -1,51 +1,51 @@
-console.log("Smart Creator Script Writer Loaded");
+const express = require("express");
+const cors = require("cors");
+require("dotenv").config();
+
+const app = express();
 
 
-const generateButton = document.getElementById("generateScript");
-const resultBox = document.getElementById("scriptResult");
+// Middleware
+app.use(cors());
+app.use(express.json());
 
 
-generateButton.addEventListener("click", async () => {
+// Test
+app.get("/", (req, res) => {
+
+    res.send("Smart Creator Backend Running 🚀");
+
+});
 
 
-    const topic = document.getElementById("topic").value;
+// Generate Script API
+app.post("/generate-script", async (req, res) => {
 
-    const type = document.getElementById("contentType").value;
-
-    const style = document.getElementById("writingStyle").value;
-
-    const language = document.getElementById("language").value;
-
-    const length = document.getElementById("scriptLength").value;
+    console.log("Received request:", req.body);
 
 
+    try {
 
-    if(topic.trim() === ""){
-
-        alert("Topic ထည့်ပါ");
-        return;
-
-    }
+        const { prompt } = req.body;
 
 
+        if (!prompt) {
 
-    resultBox.innerHTML = `
+            return res.status(400).json({
 
-    <div class="result-loading">
+                error: "Prompt is required"
 
-        ⏳ AI Script ဖန်တီးနေပါတယ်...
+            });
 
-    </div>
+        }
 
-    `;
-
-
-
-    try{
 
 
         const response = await fetch(
-            "https://smart-creator-backend-production.up.railway.app/generate-script",
+
+            "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" 
+            + process.env.GEMINI_API_KEY,
+
             {
 
                 method: "POST",
@@ -56,29 +56,26 @@ generateButton.addEventListener("click", async () => {
 
                 },
 
+
                 body: JSON.stringify({
 
-                    prompt: `
+                    contents: [
 
-You are Smart Creator AI Script Writer.
+                        {
 
-Create a ${type} script.
+                            parts: [
 
-Language: ${language}
+                                {
 
-Writing Style: ${style}
+                                    text: prompt
 
-Length: ${length}
+                                }
 
+                            ]
 
-Topic:
+                        }
 
-${topic}
-
-
-Make the script engaging, cinematic and suitable for content creators.
-
-                    `
+                    ]
 
                 })
 
@@ -91,56 +88,52 @@ Make the script engaging, cinematic and suitable for content creators.
         const data = await response.json();
 
 
-
-        if(data.result){
-
-
-            resultBox.innerHTML = `
-
-            <div class="generated-content">
-
-                <h2>🎬 AI Generated Script</h2>
-
-                <p>${data.result.replace(/\n/g,"<br>")}</p>
-
-            </div>
-
-            `;
+        console.log("Gemini Response:", data);
 
 
-        }else{
+
+        if (data.candidates) {
 
 
-            resultBox.innerHTML = `
+            res.json({
 
-            <p>
-            ❌ AI Response Error
-            </p>
+                result:
+                data.candidates[0]
+                .content
+                .parts[0]
+                .text
 
-            <pre>${JSON.stringify(data,null,2)}</pre>
+            });
 
-            `;
+
+
+        } else {
+
+
+            res.status(500).json({
+
+                error: "Gemini API Error",
+
+                details: data
+
+            });
 
 
         }
 
 
 
-    }catch(error){
+    } catch (error) {
 
 
-        resultBox.innerHTML = `
-
-        <div>
-
-        ❌ Error: ${error.message}
-
-        </div>
-
-        `;
+        console.log("SERVER ERROR:", error);
 
 
-        console.log(error);
+        res.status(500).json({
+
+            error: error.message
+
+        });
 
 
     }
@@ -150,26 +143,15 @@ Make the script engaging, cinematic and suitable for content creators.
 
 
 
+// Railway Port
 
-// Copy Script Button
-
-const copyButton = document.getElementById("copyScript");
-
-
-if(copyButton){
-
-    copyButton.addEventListener("click",()=>{
+const PORT = process.env.PORT || 3000;
 
 
-        const text = resultBox.innerText;
+app.listen(PORT, () => {
 
+    console.log(
+        `Smart Creator Backend Running on Port ${PORT}`
+    );
 
-        navigator.clipboard.writeText(text);
-
-
-        alert("Script Copied ✅");
-
-
-    });
-
-}
+});
