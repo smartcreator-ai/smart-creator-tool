@@ -46,7 +46,7 @@ generateButton.addEventListener("click", async () => {
 
 
         const response = await fetch(
-            "http://localhost:3000/generate-script",
+            ""https://smart-creator-backend-production.up.railway.app/generate-script",
             {
 
                 method:"POST",
