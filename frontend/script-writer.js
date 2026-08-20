@@ -1,108 +1,55 @@
-// Smart Creator Tool - AI Script Writer
+console.log("Script Writer Loaded");
 
 
 const generateButton = document.getElementById("generateScript");
 const resultBox = document.getElementById("scriptResult");
-const copyButton = document.getElementById("copyScript");
 
 
-// Generate Script
+if(generateButton){
 
-generateButton.addEventListener("click", function(){
+    generateButton.onclick = function(){
 
-    const type = document.getElementById("contentType").value;
-    const style = document.getElementById("writingStyle").value;
-    const language = document.getElementById("language").value;
-    const length = document.getElementById("scriptLength").value;
-    const topic = document.getElementById("topic").value;
+        console.log("Generate Clicked");
 
 
-    if(topic.trim() === ""){
-
-        alert("Please enter your topic!");
-
-        return;
-
-    }
+        const topic = document.getElementById("topic").value;
 
 
+        if(topic.trim() === ""){
 
-    resultBox.innerHTML = `
+            alert("Topic ထည့်ပါ");
 
-    <div class="generated-content">
+            return;
 
-        <h3>🎬 AI Generated Script</h3>
+        }
 
+
+        resultBox.innerHTML = `
+
+        <div>
+
+        <h2>🎬 Generated Script</h2>
 
         <p>
-        <b>Content:</b> ${type}
+        ${topic} အတွက် AI Script ဖန်တီးပြီးပါပြီ။
         </p>
 
 
         <p>
-        <b>Style:</b> ${style}
+        ဒီနေရာမှာ နောက်ပိုင်း Gemini API ချိတ်ပြီး
+        တကယ့် AI Script ထုတ်ပေးပါမယ်။
         </p>
 
+        </div>
 
-        <p>
-        <b>Language:</b> ${language}
-        </p>
-
-
-        <p>
-        <b>Length:</b> ${length}
-        </p>
+        `;
 
 
-        <hr>
+    };
 
+}
+else{
 
-        <h3>${topic}</h3>
+    console.log("Generate Button Not Found");
 
-
-        <p>
-
-        ဇာတ်လမ်းအစမှာ ${topic} ဟာ 
-        စိတ်ဝင်စားဖွယ်ကောင်းတဲ့ အဖြစ်အပျက်တစ်ခုနဲ့ စတင်ပါတယ်။
-
-        <br><br>
-
-        အဓိကဇာတ်ကောင်ဟာ မမျှော်လင့်ထားတဲ့ 
-        အခက်အခဲများကို ရင်ဆိုင်ရပြီး 
-        သူ့ရဲ့စွမ်းရည်နဲ့ ကြိုးစားမှုကို အသုံးပြုပြီး 
-        အောင်မြင်အောင် ကြိုးစားသွားပါတယ်။
-
-        <br><br>
-
-        ဒီ Script ကို AI က ${style} ပုံစံနဲ့ 
-        ဖန်တီးပေးထားပါတယ်။
-
-        </p>
-
-
-    </div>
-
-    `;
-
-
-});
-
-
-
-
-// Copy Script
-
-copyButton.addEventListener("click", function(){
-
-
-    const text = resultBox.innerText;
-
-
-    navigator.clipboard.writeText(text);
-
-
-    alert("Script Copied!");
-
-
-
-});
+}
