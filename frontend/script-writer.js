@@ -1,55 +1,130 @@
-console.log("Script Writer Loaded");
+console.log("Smart Creator Script Writer Loaded");
 
 
 const generateButton = document.getElementById("generateScript");
 const resultBox = document.getElementById("scriptResult");
 
 
-if(generateButton){
-
-    generateButton.onclick = function(){
-
-        console.log("Generate Clicked");
+generateButton.addEventListener("click", async () => {
 
 
-        const topic = document.getElementById("topic").value;
+    const topic = document.getElementById("topic").value;
+
+    const type = document.getElementById("contentType").value;
+
+    const style = document.getElementById("writingStyle").value;
+
+    const language = document.getElementById("language").value;
+
+    const length = document.getElementById("scriptLength").value;
 
 
-        if(topic.trim() === ""){
 
-            alert("Topic ထည့်ပါ");
+    if(topic.trim() === ""){
 
-            return;
+        alert("Topic ထည့်ပါ");
 
-        }
+        return;
+
+    }
+
+
+
+    resultBox.innerHTML = `
+
+    <div class="result-loading">
+
+        ⏳ AI Script ဖန်တီးနေပါတယ်...
+
+    </div>
+
+    `;
+
+
+
+    try{
+
+
+        const response = await fetch(
+            "http://localhost:3000/generate-script",
+            {
+
+                method:"POST",
+
+                headers:{
+
+                    "Content-Type":"application/json"
+
+                },
+
+
+                body:JSON.stringify({
+
+                    prompt:`
+
+You are an AI Script Writer.
+
+Create a ${type} script.
+
+Language: ${language}
+
+Style: ${style}
+
+Length: ${length}
+
+
+Topic:
+
+${topic}
+
+
+Make it engaging for content creators.
+
+                    `
+
+                })
+
+            }
+
+        );
+
+
+
+        const data = await response.json();
+
 
 
         resultBox.innerHTML = `
 
-        <div>
+        <div class="generated-content">
 
-        <h2>🎬 Generated Script</h2>
+            <h2>🎬 AI Generated Script</h2>
 
-        <p>
-        ${topic} အတွက် AI Script ဖန်တီးပြီးပါပြီ။
-        </p>
-
-
-        <p>
-        ဒီနေရာမှာ နောက်ပိုင်း Gemini API ချိတ်ပြီး
-        တကယ့် AI Script ထုတ်ပေးပါမယ်။
-        </p>
+            <p>${data.result}</p>
 
         </div>
 
         `;
 
 
-    };
 
-}
-else{
+    }catch(error){
 
-    console.log("Generate Button Not Found");
 
-}
+        resultBox.innerHTML = `
+
+        <p>
+        ❌ Backend connection failed.
+        </p>
+
+        `;
+
+
+        console.log(error);
+
+
+    }
+
+
+
+});
