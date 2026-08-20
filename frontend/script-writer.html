@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI Script Writer - Smart Creator</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="dashboard">
+
+        <!-- Sidebar -->
+
+        <aside class="sidebar">
+
+            <div class="logo">
+                <span>✦</span> Smart Creator
+            </div>
+
+            <div class="sidebar-menu">
+
+                <p class="menu-title">WORKSPACE</p>
+
+                <a href="dashboard.html" class="menu-item">
+                    🏠
+                    <span>Dashboard</span>
+                </a>
+
+                <a href="script-writer.html" class="menu-item active">
+                    ✍️
+                    <span>AI Script Writer</span>
+                </a>
+
+                <a href="#" class="menu-item">
+                    🎙️
+                    <span>AI Voice</span>
+                </a>
+
+                <a href="#" class="menu-item">
+                    🎧
+                    <span>Transcript</span>
+                </a>
+
+                <a href="#" class="menu-item">
+                    💬
+                    <span>Subtitle</span>
+                </a>
+
+                <a href="#" class="menu-item">
+                    📱
+                    <span>Teleprompter</span>
+                </a>
+
+                <p class="menu-title">MANAGEMENT</p>
+
+                <a href="#" class="menu-item">
+                    📁
+                    <span>Projects</span>
+                </a>
+
+                <a href="#" class="menu-item">
+                    🕘
+                    <span>History</span>
+                </a>
+
+                <a href="#" class="menu-item">
+                    ⚙️
+                    <span>Settings</span>
+                </a>
+
+            </div>
+
+        </aside>
+
+
+        <!-- Main -->
+
+        <main class="dashboard-main">
+
+            <header class="dashboard-header">
+
+                <div>
+                    <h1>AI Script Writer ✍️</h1>
+
+                    <p>
+                        Create powerful scripts with AI.
+                    </p>
+                </div>
+
+                <div class="credit-box">
+
+                    <span>⚡</span>
+
+                    <div>
+                        <small>Credits</small>
+                        <strong>100</strong>
+                    </div>
+
+                </div>
+
+            </header>
+
+
+            <!-- Script Workspace -->
+
+            <section class="script-workspace">
+
+
+                <!-- Left Panel -->
+
+                <div class="script-settings">
+
+                    <div class="panel-title">
+
+                        <h2>Script Settings</h2>
+
+                        <p>
+                            Tell AI what kind of content you want.
+                        </p>
+
+                    </div>
+
+
+                    <!-- Content Type -->
+
+                    <label>
+                        Content Type
+                    </label>
+
+                    <select id="contentType">
+
+                        <option value="movie">
+                            🎬 Movie Recap
+                        </option>
+
+                        <option value="tiktok">
+                            📱 TikTok Script
+                        </option>
+
+                        <option value="youtube">
+                            ▶️ YouTube Shorts
+                        </option>
+
+                    </select>
+
+
+                    <!-- Writing Style -->
+
+                    <label>
+                        Writing Style
+                    </label>
+
+                    <select id="writingStyle">
+
+                        <option>
+                            Story Style
+                        </option>
+
+                        <option>
+                            Emotional Style
+                        </option>
+
+                        <option>
+                            Explanation Style
+                        </option>
+
+                        <option>
+                            Fast Recap Style
+                        </option>
+
+                    </select>
+
+
+                    <!-- Language -->
+
+                    <label>
+                        Language
+                    </label>
+
+                    <select id="language">
+
+                        <option>
+                            Burmese
+                        </option>
+
+                        <option>
+                            English
+                        </option>
+
+                    </select>
+
+
+                    <!-- Length -->
+
+                    <label>
+                        Script Length
+                    </label>
+
+                    <select id="scriptLength">
+
+                        <option>
+                            Short
+                        </option>
+
+                        <option>
+                            Medium
+                        </option>
+
+                        <option>
+                            Long
+                        </option>
+
+                    </select>
+
+
+                    <!-- Topic -->
+
+                    <label>
+                        Topic / Story
+                    </label>
+
+                    <textarea
+                        id="topic"
+                        placeholder="Enter your movie, story or content idea..."
+                    ></textarea>
+
+
+                    <button
+                        class="generate-script"
+                        id="generateScript"
+                    >
+                        ✨ Generate Script
+                    </button>
+
+                </div>
+
+
+                <!-- Right Panel -->
+
+                <div class="script-output">
+
+                    <div class="output-header">
+
+                        <div>
+
+                            <h2>Generated Script</h2>
+
+                            <p>
+                                Your AI generated script will appear here.
+                            </p>
+
+                        </div>
+
+                        <button
+                            class="copy-script"
+                            id="copyScript"
+                        >
+                            Copy
+                        </button>
+
+                    </div>
+
+
+                    <div
+                        class="script-result"
+                        id="scriptResult"
+                    >
+
+                        <div class="result-empty">
+
+                            <div>
+                                ✍️
+                            </div>
+
+                            <h3>
+                                Your script is empty
+                            </h3>
+
+                            <p>
+                                Enter your topic and click
+                                Generate Script.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <script src="script-writer.js"></script>
+
+</body>
+</html>
