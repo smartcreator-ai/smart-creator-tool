@@ -23,7 +23,6 @@ generateButton.addEventListener("click", async () => {
     if(topic.trim() === ""){
 
         alert("Topic ထည့်ပါ");
-
         return;
 
     }
@@ -49,26 +48,25 @@ generateButton.addEventListener("click", async () => {
             "https://smart-creator-backend-production.up.railway.app/generate-script",
             {
 
-                method:"POST",
+                method: "POST",
 
-                headers:{
+                headers: {
 
-                    "Content-Type":"application/json"
+                    "Content-Type": "application/json"
 
                 },
 
+                body: JSON.stringify({
 
-                body:JSON.stringify({
+                    prompt: `
 
-                    prompt:`
-
-You are an AI Script Writer.
+You are Smart Creator AI Script Writer.
 
 Create a ${type} script.
 
 Language: ${language}
 
-Style: ${style}
+Writing Style: ${style}
 
 Length: ${length}
 
@@ -78,7 +76,7 @@ Topic:
 ${topic}
 
 
-Make it engaging for content creators.
+Make the script engaging, cinematic and suitable for content creators.
 
                     `
 
@@ -94,17 +92,37 @@ Make it engaging for content creators.
 
 
 
-        resultBox.innerHTML = `
+        if(data.result){
 
-        <div class="generated-content">
 
-            <h2>🎬 AI Generated Script</h2>
+            resultBox.innerHTML = `
 
-            <p>${data.result}</p>
+            <div class="generated-content">
 
-        </div>
+                <h2>🎬 AI Generated Script</h2>
 
-        `;
+                <p>${data.result.replace(/\n/g,"<br>")}</p>
+
+            </div>
+
+            `;
+
+
+        }else{
+
+
+            resultBox.innerHTML = `
+
+            <p>
+            ❌ AI Response Error
+            </p>
+
+            <pre>${JSON.stringify(data,null,2)}</pre>
+
+            `;
+
+
+        }
 
 
 
@@ -113,9 +131,11 @@ Make it engaging for content creators.
 
         resultBox.innerHTML = `
 
-        <p>
-        ❌ Backend connection failed.
-        </p>
+        <div>
+
+        ❌ Error: ${error.message}
+
+        </div>
 
         `;
 
@@ -126,5 +146,30 @@ Make it engaging for content creators.
     }
 
 
-
 });
+
+
+
+
+// Copy Script Button
+
+const copyButton = document.getElementById("copyScript");
+
+
+if(copyButton){
+
+    copyButton.addEventListener("click",()=>{
+
+
+        const text = resultBox.innerText;
+
+
+        navigator.clipboard.writeText(text);
+
+
+        alert("Script Copied ✅");
+
+
+    });
+
+}
