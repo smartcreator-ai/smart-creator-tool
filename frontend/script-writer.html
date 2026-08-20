@@ -302,18 +302,114 @@
 const button = document.getElementById("generateScript");
 const result = document.getElementById("scriptResult");
 
-if (button) {
-    button.addEventListener("click", function () {
+button.addEventListener("click", async function () {
+
+    const topic = document.getElementById("topic").value.trim();
+    const type = document.getElementById("contentType").value;
+    const style = document.getElementById("writingStyle").value;
+    const language = document.getElementById("language").value;
+    const length = document.getElementById("scriptLength").value;
+
+    if (!topic) {
+        alert("Topic ထည့်ပါ");
+        return;
+    }
+
+    result.innerHTML = `
+        <div style="padding:30px;">
+            <h3>⏳ AI Script ဖန်တီးနေပါတယ်...</h3>
+            <p>ခဏစောင့်ပါ...</p>
+        </div>
+    `;
+
+    const prompt = `
+You are Smart Creator AI Script Writer.
+
+Create a ${type} script.
+
+Language: ${language}
+Writing Style: ${style}
+Script Length: ${length}
+
+Topic:
+${topic}
+
+Create an engaging script suitable for content creators.
+Return only the script.
+`;
+
+    try {
+
+        const response = await fetch(
+            "https://smart-creator-backend-production.up.railway.app/generate-script",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+                    prompt: prompt
+                })
+            }
+        );
+
+        const data = await response.json();
+
+        console.log("Backend:", data);
+
+        if (!response.ok) {
+
+            result.innerHTML = `
+                <div style="padding:30px;">
+                    <h3>❌ Backend Error</h3>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                </div>
+            `;
+
+            return;
+        }
+
+        if (!data.result) {
+
+            result.innerHTML = `
+                <div style="padding:30px;">
+                    <h3>❌ AI Response Error</h3>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                </div>
+            `;
+
+            return;
+        }
 
         result.innerHTML = `
             <div style="padding:30px;">
-                <h2>✅ JavaScript အလုပ်လုပ်နေပါတယ်</h2>
-                <p>Generate Script Button အလုပ်လုပ်ပါတယ်။</p>
+                <h3>✨ Generated Script</h3>
+
+                <div style="
+                    margin-top:20px;
+                    line-height:1.8;
+                    white-space:normal;
+                ">
+                    ${data.result.replace(/\n/g, "<br>")}
+                </div>
             </div>
         `;
 
-    });
-}
+    } catch (error) {
+
+        console.error(error);
+
+        result.innerHTML = `
+            <div style="padding:30px;">
+                <h3>❌ Backend Connection Failed</h3>
+                <p>${error.message}</p>
+            </div>
+        `;
+    }
+
+});
     </script>
 
 
