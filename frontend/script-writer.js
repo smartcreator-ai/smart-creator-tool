@@ -1,157 +1,235 @@
-const express = require("express");
-const cors = require("cors");
-require("dotenv").config();
+console.log("Smart Creator Script Writer Loaded");
 
-const app = express();
+const generateButton = document.getElementById("generateScript");
+const resultBox = document.getElementById("scriptResult");
+const copyButton = document.getElementById("copyScript");
 
-
-// Middleware
-app.use(cors());
-app.use(express.json());
+const BACKEND_URL =
+    "https://smart-creator-backend-production.up.railway.app";
 
 
-// Test
-app.get("/", (req, res) => {
-
-    res.send("Smart Creator Backend Running 🚀");
-
-});
+if (!generateButton) {
+    console.error("Generate button not found");
+}
 
 
-// Generate Script API
-app.post("/generate-script", async (req, res) => {
+generateButton.addEventListener("click", async function () {
 
-    console.log("Received request:", req.body);
+    const topic =
+        document.getElementById("topic").value.trim();
+
+    const type =
+        document.getElementById("contentType").value;
+
+    const style =
+        document.getElementById("writingStyle").value;
+
+    const language =
+        document.getElementById("language").value;
+
+    const length =
+        document.getElementById("scriptLength").value;
+
+
+    if (!topic) {
+
+        alert("Topic ထည့်ပါ");
+
+        return;
+    }
+
+
+    // Loading
+    resultBox.innerHTML = `
+        <div class="result-loading">
+            ⏳ AI Script ဖန်တီးနေပါတယ်...
+        </div>
+    `;
+
+
+    const prompt = `
+You are Smart Creator AI Script Writer.
+
+Create a ${type} script.
+
+Language: ${language}
+
+Writing Style: ${style}
+
+Script Length: ${length}
+
+Topic:
+${topic}
+
+Write an engaging script suitable for content creators.
+Use natural ${language}.
+Return only the script.
+`;
 
 
     try {
 
-        const { prompt } = req.body;
-
-
-        if (!prompt) {
-
-            return res.status(400).json({
-
-                error: "Prompt is required"
-
-            });
-
-        }
-
+        console.log("Sending request to backend...");
 
 
         const response = await fetch(
-
-            "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" 
-            + process.env.GEMINI_API_KEY,
-
+            BACKEND_URL + "/generate-script",
             {
-
                 method: "POST",
 
                 headers: {
-
                     "Content-Type": "application/json"
-
                 },
 
-
                 body: JSON.stringify({
-
-                    contents: [
-
-                        {
-
-                            parts: [
-
-                                {
-
-                                    text: prompt
-
-                                }
-
-                            ]
-
-                        }
-
-                    ]
-
+                    prompt: prompt
                 })
-
             }
-
         );
 
+
+        console.log(
+            "Backend status:",
+            response.status
+        );
 
 
         const data = await response.json();
 
 
-        console.log("Gemini Response:", data);
+        console.log(
+            "Backend response:",
+            data
+        );
 
 
+        if (!response.ok) {
 
-        if (data.candidates) {
+            resultBox.innerHTML = `
+                <div class="result-error">
 
+                    ❌ Backend Error
 
-            res.json({
+                    <pre>${JSON.stringify(
+                        data,
+                        null,
+                        2
+                    )}</pre>
 
-                result:
-                data.candidates[0]
-                .content
-                .parts[0]
-                .text
+                </div>
+            `;
 
-            });
-
-
-
-        } else {
-
-
-            res.status(500).json({
-
-                error: "Gemini API Error",
-
-                details: data
-
-            });
-
-
+            return;
         }
 
+
+        if (!data.result) {
+
+            resultBox.innerHTML = `
+                <div class="result-error">
+
+                    ❌ AI က Script ပြန်မပေးပါ။
+
+                    <pre>${JSON.stringify(
+                        data,
+                        null,
+                        2
+                    )}</pre>
+
+                </div>
+            `;
+
+            return;
+        }
+
+
+        // SUCCESS
+        resultBox.innerHTML = `
+            <div class="generated-content">
+
+                <h3>✨ Generated Script</h3>
+
+                <div class="script-text">
+                    ${escapeHTML(data.result)
+                        .replace(/\n/g, "<br>")}
+                </div>
+
+            </div>
+        `;
 
 
     } catch (error) {
 
+        console.error(
+            "Connection Error:",
+            error
+        );
 
-        console.log("SERVER ERROR:", error);
 
+        resultBox.innerHTML = `
+            <div class="result-error">
 
-        res.status(500).json({
+                ❌ Backend connection failed.
 
-            error: error.message
+                <br><br>
 
-        });
+                <small>
+                    ${escapeHTML(error.message)}
+                </small>
 
+            </div>
+        `;
 
     }
 
-
 });
 
 
+// Copy Script
+if (copyButton) {
 
-// Railway Port
+    copyButton.addEventListener(
+        "click",
+        async function () {
 
-const PORT = process.env.PORT || 3000;
+            const text =
+                resultBox.innerText.trim();
 
 
-app.listen(PORT, () => {
+            if (!text) {
 
-    console.log(
-        `Smart Creator Backend Running on Port ${PORT}`
+                alert("Copy လုပ်စရာ Script မရှိသေးပါ");
+
+                return;
+            }
+
+
+            try {
+
+                await navigator.clipboard.writeText(text);
+
+                alert("Script Copied ✅");
+
+            } catch (error) {
+
+                alert("Copy မလုပ်နိုင်ပါ");
+
+            }
+
+        }
     );
 
-});
+}
+
+
+// Prevent HTML injection
+function escapeHTML(text) {
+
+    const div =
+        document.createElement("div");
+
+    div.textContent = text;
+
+    return div.innerHTML;
+
+}
